@@ -6,12 +6,33 @@ import styled from 'styled-components';
 const Lados = styled.section`
     display: flex;
     flex-direction: row;
-    justify-content: space-around; 
+    justify-content: baseline; 
+    color: #00ff40;
+    margin: 0;
+    padding: 0;
 `;
-const LadoA = styled.section`
-    margin-right: 20px;
+const Chat = styled.div`
+    overflow-y: auto;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    max-height: calc(100vh - 380px);
+    display: flex;
+    flex-direction: column-reverse;
+    margin-top: 20px;
+    &:hover{
+        overflow: auto;
+        scrollbar-color: #313175 rgb(148, 148, 148, 0.1);
+
+    }
 `;
-const LadoB = styled.section``;
+
+const Formulario = styled.div`
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+`;
+
 
 const client_id = Date.now()
 
@@ -50,26 +71,29 @@ const Raspberrypi: React.FC = () => {
     return(
         <>
             <Lados>
-                <LadoA>
-                <Logo url={logo}/>
-                <h2>Your ID: <span>{client_id}</span></h2>
-                <form action="" onSubmit={sendMessage}>
-                    <input type="text" onChange={imputText} value={messageText} autoCapitalize="off"/>
-                    <button>Send</button>
-                </form>
-
-                <ul>
-                    {serverMsg.length !== null   
-                    ?   serverMsg.map((item, index) => (
-                            <li key={index}>{item}</li>
-                        ))
-                    :   <p>{serverMsg}</p>
-                    }
-                </ul>
-                </LadoA>
-                <LadoB>
+                <article>
+                    <Logo url={logo}/> 
+                    <h2>Your ID: <span>{client_id}</span></h2>                  
+                    <Formulario>
+                    <form action="" onSubmit={sendMessage}>
+                        <input type="text" onChange={imputText} value={messageText} autoCapitalize="off"/>
+                        <button>Send</button>
+                    </form>
+                    </Formulario>
+                    <Chat>
+                        <ul>
+                            {serverMsg.length !== null   
+                            ?   serverMsg.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))
+                            :   <p>{serverMsg}</p>
+                            }
+                        </ul>
+                    </Chat>
+                </article>
+                <article>
                     <p>Lado B</p>
-                </LadoB>
+                </article>
             </Lados>
         </>
     );
