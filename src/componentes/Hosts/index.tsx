@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import ModemWifi from './cpu.svg'
+import ModemWifi from './modem-wifi-320x320.svg'
+import cpu from './cpu.svg'
 
 const Section = styled.section`
     color: #00ff40;
@@ -13,21 +14,39 @@ const IMG = styled.img`
 `;
 
 interface Props {
+    id?: number | undefined
     name?: string | undefined
     modelo?: string | undefined
     macaddress?: string | undefined
     ipaddress?: string | undefined
 }
 
-const Hosts: React.FC <Props> = ({name, modelo, macaddress, ipaddress}) => {
+const Hosts: React.FC <Props> = ({id, name, modelo, macaddress, ipaddress}: Props) => {
     return(
-        <Section>
-            <IMG src={ModemWifi} alt="modem" />
-            <p>{name} <span>{modelo}</span></p>
-            <p>MAC: {macaddress}</p>
-            <a href='#'><p>IP: {ipaddress}</p></a>
-        </Section>
+        <>
+            {!id    
+            ?
+                <Section>
+                    <IMG src={ModemWifi} alt="modem" />
+                    <p>{name} <span>{modelo}</span></p>
+                    <p>MAC: {macaddress}</p>
+                    <a href='#'><p>IP: {ipaddress}</p></a>
+                </Section>    
+            :
+                <Section>
+                    <IMG src={cpu} alt="cpu" />
+                    <p>{name} <span>{modelo}</span></p>
+                    <p>MAC: {macaddress}</p>
+                    <a href='#'><p>IP: {ipaddress}</p></a>
+                </Section>
+            }
+        </>  
     )
 }
 
 export default Hosts;
+
+/**
+    <Section>
+                 
+ */

@@ -42,6 +42,7 @@ const Header = () => {
     return(
         <UL>
             <li><A to={'/'}>Home</A></li>
+            <li><A to={'/mapa'}>Mapa</A></li>
             <li><A to={'/raspberrypi'}>RaspBerryPI</A></li>
         </UL>
     )

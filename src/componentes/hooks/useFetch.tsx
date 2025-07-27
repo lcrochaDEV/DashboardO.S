@@ -1,29 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
-import { DataItensSend } from "../interfaces/data-internet";
+import { useQueries } from "@tanstack/react-query";
+import { RequestOptions, FetchQueryOptions } from "../interfaces/data-internet";
 
-//const URLFETCH = 'http://localhost:8000/gw/ont121w';
 
-const fetchData = async (url: string, dataItens: DataItensSend) => {
-    const headersData = {
+const fetchData = async (url: string, dataheader?: any) => {
+    const headersData: RequestOptions = {
         method: 'POST',
         headers: new Headers({
             "Authorization": "",
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }),
-        body: JSON.stringify(dataItens),            
+        body: JSON.stringify(dataheader),            
     };
-    const response = await fetch(url, headersData)     
+    const response = await fetch(url, headersData)    
     return response.json()
-} 
+};
 
-export const useFetchData = <T = unknown>(url: string, dataItens: DataItensSend) => {
-    const query = useQuery<T>({
-        queryFn: () => fetchData(url, dataItens),
-        queryKey:['receivedKey']
-    })
-    return {
-        ...query,
-        data: query.data
-    };
-}
+export const useFetchData = <T = unknown>(queries: FetchQueryOptions<T>[]) => {
+  const query = useQueries({
+        queries: queries.map(query => ({
+        queryKey: query.queryKey,
+        enabled: query.enabled,
+        queryFn: async () => fetchData(query.url, query.dataheader),
+        ...query.options,
+    })),
+  });
+    return query
+};

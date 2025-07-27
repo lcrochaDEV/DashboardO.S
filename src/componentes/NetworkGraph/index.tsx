@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-//import list_data from './list_data.json'
+import list_data from './list_data.json'
+
 
 const Container = styled.section`
     width: 100%;
@@ -10,9 +11,11 @@ const Container = styled.section`
 
 
 const NetworkGraph = () => {
+    const data = list_data;
+
     return(
         <section>
-            <Container></Container>
+            <Container/>
         </section>
     )
 }

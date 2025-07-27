@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 
 const Polygon = styled.polygon`
-  stroke-dasharray: 17;
-  animation: dash 2.5s cubic-bezier(0.35, 0.04, 0.63, 0.95) infinite;
+    stroke-dasharray: 17;
+    animation: dash 2.5s cubic-bezier(0.35, 0.04, 0.63, 0.95) infinite;
     @keyframes dash {
         to {
             stroke-dashoffset: 136;
@@ -11,9 +11,9 @@ const Polygon = styled.polygon`
     }
 `;
 const Text = styled.text`
-  font-family: 'Orbitron', sans-serif;
-  font-size: 7px;
-  animation: blink 0.9s ease-in-out infinite;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 7px;
+    animation: blink 0.9s ease-in-out infinite;
     @keyframes blink {
         50% {
             opacity: 0;
