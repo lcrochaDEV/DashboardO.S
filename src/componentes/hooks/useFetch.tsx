@@ -1,8 +1,8 @@
-import { useQueries } from "@tanstack/react-query";
-import { RequestOptions, FetchQueryOptions } from "../interfaces/data-internet";
+import { useQuery } from "@tanstack/react-query";
+import { RequestOptions, FetchQueryOptions, headersDataBudy } from "../interfaces/data-internet";
 
 
-const fetchData = async (url: string, dataheader?: any) => {
+const fetchData = async <T = unknown>(url: string, headersDataBudy: headersDataBudy): Promise<T> => {
     const headersData: RequestOptions = {
         method: 'POST',
         headers: new Headers({
@@ -10,20 +10,20 @@ const fetchData = async (url: string, dataheader?: any) => {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }),
-        body: JSON.stringify(dataheader),            
+        body: JSON.stringify(headersDataBudy.dataheader),            
     };
-    const response = await fetch(url, headersData)    
+    const response = await fetch(url, headersData)
     return response.json()
 };
 
-export const useFetchData = <T = unknown>(queries: FetchQueryOptions<T>[]) => {
-  const query = useQueries({
-        queries: queries.map(query => ({
-        queryKey: query.queryKey,
-        enabled: query.enabled,
-        queryFn: async () => fetchData(query.url, query.dataheader),
-        ...query.options,
-    })),
-  });
-    return query
-};
+export const useFetchData = <T = unknown>(url: string, headersDataBudy: headersDataBudy, queries: FetchQueryOptions) => {
+    const query = useQuery<T, Error>({
+        queryKey: queries?.queryKey,
+        queryFn: async () => fetchData<T>(url, headersDataBudy),
+        enabled: queries?.enabled,
+    })
+    return{
+        ...query,
+        data: query.data,
+    } 
+}

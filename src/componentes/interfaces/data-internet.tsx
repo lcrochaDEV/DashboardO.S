@@ -1,10 +1,5 @@
 import { UseQueryOptions, QueryKey } from '@tanstack/react-query';
 
-export interface RequestOptions {
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE'; 
-    headers: Headers;
-    body?: string;
-}
 
 interface DataItensSend {
     host?: string 
@@ -13,13 +8,18 @@ interface DataItensSend {
     password?: string
     commands?: object
 }
+
+export interface headersDataBudy {
+    dataheader?: DataItensSend;
+} 
+
 export interface FetchQueryOptions<T = unknown> {
-  url: string;
-  queryKey: QueryKey;
-  options?: Omit<UseQueryOptions<T, Error>, 'queryFn' | 'queryKey' | 'enable'>;
-  dataheader?: DataItensSend;
-  enabled?: boolean;
+    queryKey: QueryKey;
+    options?: Omit<UseQueryOptions<T, Error>, 'queryFn' | 'queryKey' | 'enable'>;
+    enabled?: boolean;
+    refetchOnWindowFocus?: boolean;
 }
+
 export interface ItensResponse {
     id: number
     Address: string
@@ -42,3 +42,8 @@ export interface ItensVesionsSysyem {
     SysUpTime: string
 }
 
+export interface RequestOptions {
+method: 'GET' | 'POST' | 'PUT' | 'DELETE'; 
+headers: Headers;
+body?: string;
+}

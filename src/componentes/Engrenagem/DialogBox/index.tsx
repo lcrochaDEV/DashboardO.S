@@ -1,5 +1,5 @@
-import { DialogHTMLAttributes, ReactEventHandler, ReactNode, useEffect } from "react";
 import styled from "styled-components";
+import Formulario from "../Forms";
 
 const Dialog = styled.dialog`
     position: fixed;
@@ -28,6 +28,7 @@ const DialogBox = ({ hooksChildren }: any ) =>  {
     return (
         <>   
         <Dialog>
+            <Formulario/>
             <Cancel className="material-symbols-outlined" onClick={hooksChildren}>cancel</Cancel>
         </Dialog>   
         </>
