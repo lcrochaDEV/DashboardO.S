@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import EngrenagemImg from './gce-systems-management-svgrepo-com.svg'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DialogBox from '../DialogBox';
 import { useGetLocalStorge } from '../useLocalStorge';
 
@@ -13,7 +13,11 @@ const IMG = styled.img`
 
 const Engrenagem = () => {
     let [open, setOpen] = useState(false);
-    let d = useGetLocalStorge('menuLateral', 2)
+
+    let [key, setKey] = useState('menuLateral');
+    let [value, setvalue] = useState(false);
+    let [poststorge] = useGetLocalStorge(key, 6)
+    poststorge()
 
     const handleOpenDialog = () => {
         open = !open
