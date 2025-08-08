@@ -2,8 +2,8 @@ import { styled } from "styled-components";
 import { ItensResponse, ItensVesionsSysyem } from "../interfaces/data-internet";
 import { useFetchData } from "../hooks/useFetch";
 import Hosts from "../Hosts";
-import Loading from "../Loadding";
 import Engrenagem from "../Engrenagem/Cadastro";
+import Loading from "../Loadding";
 
 
 
@@ -101,9 +101,3 @@ const Home: React.FC = () => {
 }
 
 export default Home;
-
-/*
-                     {isHostData?.map(isHostData => {
-                        <Hosts key={isHostData?.id} name={isHostData?.FullHostnameFQDN} modelo={isHostData?.ShortHostname} macaddress={isHostData?.HWaddress} ipaddress={isHostData?.Address}/>
-                    })}
- */

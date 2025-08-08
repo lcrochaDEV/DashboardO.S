@@ -1,5 +1,8 @@
-import { useState } from "react";
+import React, { InputHTMLAttributes, useState } from "react";
 import styled from "styled-components";
+import { useLocalStorge } from '../../hooks/useLocalStorge';
+
+
 const Conteiner = styled.section`
     display: flex;
     flex-direction: row;
@@ -23,29 +26,64 @@ const Form = styled.form`
     flex-direction: column;
     justify-content: center;
     margin-top:10px;
+    `;
+const Lista = styled.table`
+    border-top: 1px solid;
+    border-color: rgba(255, 255, 255, 0.3);
+    margin-top: 15px;
+    font-size: 13px;
+    text-align: left;
+`;
+const Delete = styled.span`
+    font-size: 20px;
+    color: aliceblue;
 `;
 
 const Forms = () => {
-    const [ip, setIp] = useState<string>('')
-    const [mac, setMac] = useState<string>('')
-    const [model, setModel] = useState<string>('')
-
+    const [ ip, setIp   ] = useState<string | false>(false);
+    const [ macaddress, setMacaddress   ] = useState<string>('');
+    const [ marca, setMarca ] = useState<string | false>(false);
+    
+    const [ poststorge, getstorge ] = useLocalStorge({ key: marca, ip: ip, macaddress: macaddress });
+    const submitForme = (event: React.FormEvent) => {
+        event.preventDefault();
+        poststorge()
+        getstorge()
+    }
     return (
     <Conteiner>
         <Formulario>
             <h2>Cadastro de Dispositivo</h2>
-            <Form action="#" method="POST">
+            <Form action="#" onSubmit={submitForme}>
                 <label htmlFor="ip_address">Endereço IP:</label>
-                <input type="text" value={ip} onChange={ip => setIp(ip.target.value)} id="ip_address" name="ip_address" placeholder="Ex: 192.168.1.1" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" title="Digite um endereço IP válido (Ex: 192.168.1.1)" required />
+                <input type="text" value={ip === false ? '' : ip} onChange={ip => setIp(ip.target.value)} id="ip_address" name="ip_address" placeholder="Ex: 192.168.1.1" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" title="Digite um endereço IP válido (Ex: 192.168.1.1)" required />
 
                 <label htmlFor="mac_address">Endereço MAC:</label>
-                <input type="text" value={mac} onChange={mac => setMac(mac.target.value)} id="mac_address" name="mac_address" placeholder="Ex: 00:1A:2B:3C:4D:5E" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" title="Digite um endereço MAC válido (Ex: 00:1A:2B:3C:4D:5E ou 00-1A-2B-3C-4D-5E)" />
+                <input type="text" value={macaddress} onChange={macaddress => setMacaddress(macaddress.target.value)} id="mac_address" name="mac_address" placeholder="Ex: 00:1A:2B:3C:4D:5E" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" title="Digite um endereço MAC válido (Ex: 00:1A:2B:3C:4D:5E ou 00-1A-2B-3C-4D-5E)" />
 
                 <label htmlFor="brand">Marca do Dispositivo:</label>
-                <input type="text" value={model} onChange={model => setModel(model.target.value)} id="brand" name="brand" placeholder="Ex: Cisco, TP-Link, Samsung" required />
+                <input type="text" value={marca === false ? '' : marca} onChange={marca => setMarca(marca.target.value)} id="brand" name="brand" placeholder="Ex: Cisco, TP-Link, Samsung" required />
 
-                <input type="submit" value="Cadastrar" />
+                <button type="submit">Cadastrar</button>
             </Form>
+            <Lista>
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>IP</th>
+                        <th>Endereço Mac</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Intelbras</td>
+                        <td>192.168.1.1</td>
+                        <td>00-00-00-00-00-00</td>
+                        <td><a href="#"><Delete className="material-symbols-outlined">delete</Delete></a></td>
+                    </tr>
+                </tbody>
+                
+            </Lista>
         </Formulario>
     </Conteiner>
 

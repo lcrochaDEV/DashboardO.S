@@ -25,7 +25,7 @@ const Text = styled.text`
 const Loading = () => {
     return(
         <svg width="200" height="200" viewBox="0 0 40 60">
-            <Polygon fill="none" stroke="#fff" stroke-width="1" points="16,1 32,32 1,32" />
+            <Polygon fill="none" stroke="#fff" strokeWidth="1" points="16,1 32,32 1,32" />
             <Text x="0" y="45" fill="#fff">Loading...</Text>
         </svg>
     )
