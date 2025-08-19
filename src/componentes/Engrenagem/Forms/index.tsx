@@ -1,6 +1,6 @@
-import React, { InputHTMLAttributes, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useLocalStorge } from '../../hooks/useLocalStorge';
+import { useLocalStorge } from '../../hooks/useLocalStorage';
 
 
 const Conteiner = styled.section`
@@ -26,7 +26,7 @@ const Form = styled.form`
     flex-direction: column;
     justify-content: center;
     margin-top:10px;
-    `;
+`;
 const Lista = styled.table`
     border-top: 1px solid;
     border-color: rgba(255, 255, 255, 0.3);
@@ -38,21 +38,68 @@ const Delete = styled.span`
     font-size: 20px;
     color: aliceblue;
 `;
+const Edit = styled.span`
+    font-size: 20px;
+    color: aliceblue;
+`;
 
 const Forms = () => {
-    const [ ip, setIp   ] = useState<string | false>(false);
-    const [ macaddress, setMacaddress   ] = useState<string>('');
-    const [ marca, setMarca ] = useState<string | false>(false);
+    //INPUTS
+    const [ id, setId  ] = useState<string | number | null | undefined>(null);
+    const [ ip, setIp  ] = useState<string | false | undefined>(false);
+    const [ macaddress, setMacaddress   ] = useState<string | undefined>('');
+    const [ marca, setMarca ] = useState<string | false | undefined>(false);
+
+    //TAGS
+    const [ mode, setModes ] = useState<string | false | undefined>('delete');
+    const [ textBtn, seTextBtn ] = useState<string | false | undefined>('Cadastrar');
+    const [ actionBtnReturn, setActionBtnReturn ] = useState<string>('');
     
-    const [ poststorge, getstorge ] = useLocalStorge({ key: marca, ip: ip, macaddress: macaddress });
+    const [ { poststorage, editestorage, deletestorage }, getstorage ] = useLocalStorge({ marca: marca || false, ip: ip || false, macaddress: macaddress });
+
     const submitForme = (event: React.FormEvent) => {
         event.preventDefault();
-        poststorge()
-        getstorge()
+        if (!id) {
+            poststorage()
+            setIp('')
+            setMacaddress('')
+            setMarca('')
+        }else{
+            editestorage(id)
+            setIp('')
+            setMacaddress('')
+            setMarca('')
+        }
     }
+    
+    const handleDelete = (id : string | number | null) => {
+       deletestorage(id);
+    }
+
+    const handleEdit = (id: string | number | null) => {
+        let buscarData = getstorage.find(itens => itens.id === id);
+        setId(buscarData?.id)
+        setIp(buscarData?.ip);
+        setMacaddress(buscarData?.macaddress);
+        setMarca(buscarData?.marca);
+        setModes('');
+        seTextBtn('Editar');
+        setActionBtnReturn('arrow_back_ios_new');
+    };
+    
+    const handleReturn = () => {
+        setIp('')
+        setMacaddress('')
+        setMarca('')
+        seTextBtn('Cadastrar');
+        setModes('delete');
+        setActionBtnReturn('');
+    }
+
     return (
     <Conteiner>
         <Formulario>
+            <a href="#" className="material-symbols-outlined" onClick={() => handleReturn()}>{actionBtnReturn}</a>
             <h2>Cadastro de Dispositivo</h2>
             <Form action="#" onSubmit={submitForme}>
                 <label htmlFor="ip_address">Endereço IP:</label>
@@ -64,7 +111,7 @@ const Forms = () => {
                 <label htmlFor="brand">Marca do Dispositivo:</label>
                 <input type="text" value={marca === false ? '' : marca} onChange={marca => setMarca(marca.target.value)} id="brand" name="brand" placeholder="Ex: Cisco, TP-Link, Samsung" required />
 
-                <button type="submit">Cadastrar</button>
+                <button type="submit">{textBtn}</button>
             </Form>
             <Lista>
                 <thead>
@@ -74,15 +121,17 @@ const Forms = () => {
                         <th>Endereço Mac</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Intelbras</td>
-                        <td>192.168.1.1</td>
-                        <td>00-00-00-00-00-00</td>
-                        <td><a href="#"><Delete className="material-symbols-outlined">delete</Delete></a></td>
-                    </tr>
+                <tbody> 
+                    {getstorage.map(itens =>      
+                        <tr key={itens.id}>
+                            <td>{itens.marca}</td>
+                            <td>{itens.ip}</td>
+                            <td>{itens.macaddress}</td>
+                            <td><a href="#" onClick={() => handleDelete(itens.id)}><Delete className="material-symbols-outlined" data-id={itens.id}>{mode}</Delete></a></td>
+                            <td><a href="#" onClick={() => handleEdit(itens.id)}><Edit className="material-symbols-outlined">edit</Edit></a></td>
+                        </tr>
+                    )}
                 </tbody>
-                
             </Lista>
         </Formulario>
     </Conteiner>
