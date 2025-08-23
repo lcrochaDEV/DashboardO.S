@@ -46,16 +46,18 @@ const Edit = styled.span`
 const Forms = () => {
     //INPUTS
     const [ id, setId  ] = useState<string | number | null | undefined>(null);
-    const [ ip, setIp  ] = useState<string | false | undefined>(false);
+    const [ ip, setIp  ] = useState<string | undefined>('');
     const [ macaddress, setMacaddress   ] = useState<string | undefined>('');
-    const [ marca, setMarca ] = useState<string | false | undefined>(false);
+    const [ marca, setMarca ] = useState<string | undefined>('');
+    const [ user, setUser ] = useState<string | number>('');
+    const [ password, setPassword ] = useState<string | number>('');
 
     //TAGS
     const [ mode, setModes ] = useState<string | false | undefined>('delete');
     const [ textBtn, seTextBtn ] = useState<string | false | undefined>('Cadastrar');
     const [ actionBtnReturn, setActionBtnReturn ] = useState<string>('');
     
-    const [ { poststorage, editestorage, deletestorage }, getstorage ] = useLocalStorge({ marca: marca || false, ip: ip || false, macaddress: macaddress });
+    const [ { poststorage, editestorage, deletestorage }, getstorage ] = useLocalStorge({ marca: marca || undefined, ip: ip || undefined, macaddress: macaddress, user: user, password: password});
 
     const submitForme = (event: React.FormEvent) => {
         event.preventDefault();
@@ -72,10 +74,10 @@ const Forms = () => {
         }
     }
     
-    const handleDelete = (id : string | number | null) => {
+    const handleDelete = (id: string | number | null) => {
        deletestorage(id);
     }
-
+    
     const handleEdit = (id: string | number | null) => {
         let buscarData = getstorage.find(itens => itens.id === id);
         setId(buscarData?.id)
@@ -103,13 +105,13 @@ const Forms = () => {
             <h2>Cadastro de Dispositivo</h2>
             <Form action="#" onSubmit={submitForme}>
                 <label htmlFor="ip_address">Endereço IP:</label>
-                <input type="text" value={ip === false ? '' : ip} onChange={ip => setIp(ip.target.value)} id="ip_address" name="ip_address" placeholder="Ex: 192.168.1.1" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" title="Digite um endereço IP válido (Ex: 192.168.1.1)" required />
+                <input type="text" value={ip === undefined ? '' : ip} onChange={ip => setIp(ip.target.value)} id="ip_address" name="ip_address" placeholder="Ex: 192.168.1.1" pattern="^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" title="Digite um endereço IP válido (Ex: 192.168.1.1)" required />
 
                 <label htmlFor="mac_address">Endereço MAC:</label>
                 <input type="text" value={macaddress} onChange={macaddress => setMacaddress(macaddress.target.value)} id="mac_address" name="mac_address" placeholder="Ex: 00:1A:2B:3C:4D:5E" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" title="Digite um endereço MAC válido (Ex: 00:1A:2B:3C:4D:5E ou 00-1A-2B-3C-4D-5E)" />
 
                 <label htmlFor="brand">Marca do Dispositivo:</label>
-                <input type="text" value={marca === false ? '' : marca} onChange={marca => setMarca(marca.target.value)} id="brand" name="brand" placeholder="Ex: Cisco, TP-Link, Samsung" required />
+                <input type="text" value={marca === undefined ? '' : marca} onChange={marca => setMarca(marca.target.value)} id="brand" name="brand" placeholder="Ex: Cisco, TP-Link, Samsung" required />
 
                 <button type="submit">{textBtn}</button>
             </Form>

@@ -9,42 +9,44 @@ const Section = styled.section`
     font-size: 11px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: bold;
-    text-transform: uppercase;*/
+    text-transform: uppercase;
 `;  
 const IMG = styled.img`
     width: 70px;
 `;
 
 interface Props {
-    id?: number | undefined
+    uuid?: number | undefined
+    id?: number | string | undefined
     name?: string | undefined
     modelo?: string | undefined
     macaddress?: string | undefined
     ipaddress?: string | undefined
 }
 
-const Hosts: React.FC <Props> = ({id, name, modelo, macaddress, ipaddress}: Props) => {
+const Hosts: React.FC <Props> = ({uuid, id, name, modelo, macaddress, ipaddress}: Props) => {
     return(
         <>
-            {!id
+            {!uuid
             ?
-                <Section>
-                    <Link to={'/modem'}>
-                        <IMG src={ModemWifi} alt="modem" />
-                        <p>{name} <span>{modelo}</span></p>
-                        <p>MAC: {macaddress}</p>
-                        <p>IP: {ipaddress}</p>
-                    </Link>
-                </Section>    
+            <Section>
+                <Link to={'/modem'}>
+                    <IMG src={ModemWifi} alt="modem" />
+                    <p>{name} <span>{modelo}</span></p>
+                    <p>MAC: {macaddress}</p>
+                    <p>IP: {ipaddress}</p>
+                    <p>{id}</p>
+                </Link>
+            </Section>    
             :
-                <Section>
-                    <Link to={'/hosts'}>
-                        <IMG src={cpu} alt="cpu" />
-                        <p>{name} <span>{modelo}</span></p>
-                        <p>MAC: {macaddress}</p>
-                        <p>IP: {ipaddress}</p>
-                    </Link>
-                </Section>
+            <Section>
+                <Link to={'/hosts'}>
+                    <IMG src={cpu} alt="cpu" />
+                    <p>{name} <span>{modelo}</span></p>
+                    <p>MAC: {macaddress}</p>
+                    <p>IP: {ipaddress}</p>
+                </Link>
+            </Section>
             }
         </>  
     )

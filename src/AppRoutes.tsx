@@ -6,7 +6,8 @@ import Home from './componentes/Home'
 import Raspberrypi from './componentes/Raspberrypi';
 import './App.css'
 import { queryClient } from './services/queryClient';
-import NetworkGraph from './componentes/NetworkGraph';
+import Mapa from './componentes/Mapa';
+
 
 
 
@@ -17,11 +18,12 @@ function App() {
         <UserContext.Provider value={{user: 'Lucas Rocha'}}>
           <BrowserRouter>
             <Routes>
-            <Route  path={'/'} element={<PethRouter />}>
-              <Route  path={'/'} element={<Home />}/>
-              <Route  path={'/mapa'} element={<NetworkGraph />}/>
-              <Route  path={'/raspberrypi'} element={<Raspberrypi />}/>
-            </Route>
+              <Route  path={'/'} element={<PethRouter />}>
+                <Route  path={'/'} element={<Home />}/>
+                <Route  path={'/mapa'} element={<Mapa />}/>
+                <Route  path={'/raspberrypi'} element={<Raspberrypi />}/>
+                <Route  path={'/modem'} element={''}/>
+              </Route>
             </Routes>
           </BrowserRouter>
         </UserContext.Provider>

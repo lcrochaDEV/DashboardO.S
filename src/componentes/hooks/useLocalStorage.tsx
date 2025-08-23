@@ -1,10 +1,12 @@
 import { useState } from "react";
 
 interface StorageItens {
-    id: number | string | null,
-    marca: string | false,
-    ip: string | false,
+    id: number | string,
+    marca: string,
+    ip: string,
     macaddress?: string,
+    user: string | number,
+    password: string | number
 }
 interface UseLocalStorageReturn {
   poststorage: () => void,
@@ -18,6 +20,7 @@ const itemId = () => {
    return itensStorage.length +1;
 }
 
+
 const cadastrarLocalSorage = ({ value }: StorageItens | any) => {
     //VERIFICA CADASTRO REPETIDOS     
     let arraList = itensStorage.filter((item) => item.ip === value[0].ip);
@@ -30,17 +33,19 @@ const cadastrarLocalSorage = ({ value }: StorageItens | any) => {
     }
 }
 
-const removedataLocalSorage = ({ id }: StorageItens) => {
+const removedataLocalSorage = ({ id }: Omit<StorageItens, 'marca' | 'ip' | 'user' | 'password'>) => {
     itensStorage.splice(itensStorage.findIndex(itens => itens.id === id), 1);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(itensStorage));
 }
 
-const editdataLocalSorage = ({ id, ip, marca, macaddress }: StorageItens) => {
+const editdataLocalSorage = ({ id, ip, marca, macaddress, user, password  }: StorageItens) => {
     let objItens = {
                 "id": id,
                 "marca": marca,
                 "ip": ip,
                 "macaddress": macaddress,
+                "user": user,
+                "password": password
     }
     itensStorage.splice(itensStorage.findIndex(itens => itens.id === id), 1, objItens)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(itensStorage));
@@ -48,11 +53,11 @@ const editdataLocalSorage = ({ id, ip, marca, macaddress }: StorageItens) => {
 
 }
 
-export const useLocalStorge = ({ marca, ip, macaddress }: Omit<StorageItens, 'id'>): [UseLocalStorageReturn, StorageItens[]] => {
-    const [ getstorage ] = useState<StorageItens[]>(Object.assign(itensStorage)); //BUSCA DADOS E EXIBE NA TABELA
+export const useLocalStorge = ({ marca, ip, macaddress, user, password }: Partial<Omit<StorageItens, 'id'>>): [UseLocalStorageReturn, StorageItens[]] => {
+    const [ getstorage, setGetstorage ] = useState<StorageItens[]>(itensStorage); //BUSCA DADOS E EXIBE NA TABELA
     
     const poststorage = () => {
-        if(marca !== false && ip !== false)
+        if(marca && ip)
             cadastrarLocalSorage({ marca: marca, 
         value: [
             {
@@ -60,21 +65,34 @@ export const useLocalStorge = ({ marca, ip, macaddress }: Omit<StorageItens, 'id
                 "marca": marca,
                 "ip": ip,
                 "macaddress": macaddress,
+                "user": user,
+                "password": password
             }
         ]})
+        setGetstorage(itensStorage as [])
     }
 
     const editestorage = (id: string | number | null) => {
         if (id !== null) {
-            editdataLocalSorage({ id: id, ip: ip, marca: marca, macaddress: macaddress })
+            editdataLocalSorage(
+                {
+                    id: id, 
+                    ip: ip ?? '', 
+                    marca: marca ?? '', 
+                    macaddress: macaddress, 
+                    user: user ?? '', 
+                    password: password ?? ''
+                }
+            )
         }
     }
 
     const deletestorage =  (id: string | number | null) => {
         if (id !== null) { 
-            removedataLocalSorage({ id: id, marca: false, ip: false })
+            removedataLocalSorage({ id: id })
         }
+        setGetstorage(getstorage.filter(itens => itens.id !== id))
     }
 
-    return [ { poststorage: poststorage, editestorage: editestorage ,deletestorage: deletestorage }, getstorage ]
+    return [ { poststorage: poststorage, editestorage: editestorage, deletestorage: deletestorage }, getstorage ]
 }
