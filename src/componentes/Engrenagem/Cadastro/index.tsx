@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import EngrenagemImg from './gce-systems-management-svgrepo-com.svg'
 import { useState } from 'react';
-import DialogBox from '../DialogBox';
+import DialogBox from '..//../DialogBox'
+import Forms from '../Forms';
 
 
 const IMG = styled.img`
@@ -12,18 +13,19 @@ const IMG = styled.img`
 
 
 const Engrenagem = () => {
-    let [open, setOpen] = useState(false);
+    let [open, setOpen] = useState<boolean>(false);
 
     const handleOpenDialog = () => {
-        open = !open
-        setOpen(open)
+        open = !open;
+        setOpen(open);        
     };
+
 
     return(
         <>
-            <a href={'#'} onClick={() => setOpen(true)}><IMG src={EngrenagemImg} alt="Engrenagem" /></a>
+            <a href={'#'} onClick={() => setOpen(true)} ><IMG src={EngrenagemImg} alt="Engrenagem" /></a>
             {open && (
-                <DialogBox hooksChildren={handleOpenDialog}/>
+                <DialogBox hooksChildren={handleOpenDialog} hendleCmpnente={<Forms />}/>
                 )
             } 
         </> 

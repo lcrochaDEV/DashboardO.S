@@ -35,8 +35,6 @@ const A = styled(Link)`
     } 
 `;
 
-
-
 const Header = () => {
 
     return(

@@ -7,12 +7,10 @@ import Raspberrypi from './componentes/Raspberrypi';
 import './App.css'
 import { queryClient } from './services/queryClient';
 import Mapa from './componentes/Mapa';
-
-
-
+import Host from './componentes/Host';
 
 function App() {
-
+   
   return (
      <QueryClientProvider client={queryClient}>
         <UserContext.Provider value={{user: 'Lucas Rocha'}}>
@@ -22,6 +20,7 @@ function App() {
                 <Route  path={'/'} element={<Home />}/>
                 <Route  path={'/mapa'} element={<Mapa />}/>
                 <Route  path={'/raspberrypi'} element={<Raspberrypi />}/>
+                <Route  path={'/host/:hostId'} element={<Host />}/>
                 <Route  path={'/modem'} element={''}/>
               </Route>
             </Routes>

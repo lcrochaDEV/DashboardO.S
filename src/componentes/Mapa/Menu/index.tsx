@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useLocalStorge } from "..//../hooks/useLocalStorage";
 import NetworkGraph from '../../NetworkGraph';
-import { useEffect, useState } from 'react';
-import NetworkPNG from './Network-PNG.png'
+import { useState } from 'react';
+import Nuvem from './nuvem.png'
 
 const UL = styled.ul`
     width: 100%;
@@ -45,8 +45,6 @@ const IMG = styled.img`
 const Menu: React.FC = () => {
     const [ {}, getstorage ] = useLocalStorge({});
     const [ id, setId ] = useState<number | string>();
-    console.log(id)
-
 
     return (
         <>
@@ -56,8 +54,7 @@ const Menu: React.FC = () => {
                 ))}
             </UL>
              {id && <NetworkGraph id={id} />}
-             {!id && <IMG src={NetworkPNG} alt="nodes" />}
-             
+             {!id && <IMG src={Nuvem} alt="nodes" />}          
         </>
     );
 }

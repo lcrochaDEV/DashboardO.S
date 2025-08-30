@@ -4,20 +4,15 @@ import { useFetchData } from "../hooks/useFetch";
 import { useLocalStorge } from "../hooks/useLocalStorage";
 import { useEffect, useState } from "react";
 import Hosts from "../Hosts";
-import Engrenagem from "../Engrenagem/Cadastro";
 import Loading from "../Loadding";
 
 
-const HomePage = styled.section`
+const HostList = styled.section`
     display: flex;
     position: fixed;
     left: 10px;
 `;
-const Flut = styled.div`
-    position: fixed;
-    right: 0;
-    top: 0;
-`;
+
 const Loading_Div = styled.div`
     margin: 0;
     display: flex;
@@ -39,7 +34,7 @@ interface Props {
 
 const NetworkGraph: React.FC<Props> = ({ id }) => {
     const [ {}, getstorage ] = useLocalStorge({});
-    const [ hostdata,  setHostdata] = useState(getstorage.find(itens => itens.id === id))
+    const [ hostdata, setHostdata] = useState(getstorage.find(itens => itens.id === id))
 
     useEffect(() => {
         setHostdata(getstorage.find(itens => itens.id === id));
@@ -54,7 +49,7 @@ const NetworkGraph: React.FC<Props> = ({ id }) => {
                 "commands": ["show system version"]
             },
         }, {
-            queryKey: ['isArpData'],
+            queryKey: ['isArpData', 'isArpCacheData'],
         });
 
     const { data:isHostData } = useFetchData<ItensResponse[]>(URLFETCH, {
@@ -69,7 +64,7 @@ const NetworkGraph: React.FC<Props> = ({ id }) => {
                 ]
             },
         }, {
-            queryKey: ['isHostData'],
+            queryKey: ['isHostData', 'isHostCacheData'],
             enabled: !!isArpData?.ModelNumber,
         });
 
@@ -85,7 +80,7 @@ const NetworkGraph: React.FC<Props> = ({ id }) => {
     return(
         <>
         
-            <HomePage> 
+            <HostList> 
                 <>
                     <Hosts
                         id={hostdata?.id}   
@@ -105,10 +100,7 @@ const NetworkGraph: React.FC<Props> = ({ id }) => {
                         />
                     ))}
                 </>
-            </HomePage>
-            <Flut>
-                <Engrenagem/>
-            </Flut>
+            </HostList>
         </>
     )
 }

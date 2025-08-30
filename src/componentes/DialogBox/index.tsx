@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Formulario from "../Forms";
+import { ReactNode } from "react";
 
 const Dialog = styled.dialog`
     position: fixed;
@@ -22,13 +22,15 @@ const Cancel = styled.span`
     font-size: 35px;
     color: #FFF;
 `;
-
-
-const DialogBox = ({ hooksChildren }: any ) =>  {
+interface DialogBoxProps {
+    hooksChildren: () => void; // A prop hooksChildren é uma função que não retorna nada
+    hendleCmpnente: ReactNode; // A prop hendleCmpnente pode ser qualquer elemento React
+}
+const DialogBox = ({ hooksChildren, hendleCmpnente }: DialogBoxProps ) =>  {
     return (
         <>   
         <Dialog>
-            <Formulario/>
+            {hendleCmpnente}
             <Cancel className="material-symbols-outlined" onClick={hooksChildren}>cancel</Cancel>
         </Dialog>   
         </>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useLocalStorge } from '../../hooks/useLocalStorage';
 
-
 const Conteiner = styled.section`
     display: flex;
     flex-direction: row;
@@ -56,7 +55,7 @@ const Forms = () => {
     const [ mode, setModes ] = useState<string | false | undefined>('delete');
     const [ textBtn, seTextBtn ] = useState<string | false | undefined>('Cadastrar');
     const [ actionBtnReturn, setActionBtnReturn ] = useState<string>('');
-    
+    //BUSCAR DADOS DE LOCALSTORAGE
     const [ { poststorage, editestorage, deletestorage }, getstorage ] = useLocalStorge({ marca: marca || undefined, ip: ip || undefined, macaddress: macaddress, user: user, password: password});
 
     const submitForme = (event: React.FormEvent) => {
