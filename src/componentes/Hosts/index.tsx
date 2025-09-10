@@ -3,6 +3,7 @@ import ModemWifi from './modem-wifi-320x320.svg'
 import cpu from './cpu.svg'
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useLocalStorge } from "../hooks/useLocalStorage";
 
 const Section = styled.section`
     color: #00ff40;
@@ -12,6 +13,7 @@ const Section = styled.section`
     font-weight: bold;
     text-transform: uppercase;
     margin-left: 7px;
+    align-items: center;
 `;  
 const IMG = styled.img`
     width: 60px;
@@ -26,11 +28,13 @@ interface Props {
     ipaddress?: string | undefined
 }
 
-const Hosts: React.FC <Props> = ({ uuid, id, name, modelo, macaddress, ipaddress }: Props) => {
+const Hosts: React.FC <Props> = ({ uuid, name, modelo, macaddress, ipaddress }: Props) => {
+    const [ {}, getstorage ] = useLocalStorge({key: 'hosts'});
     const [ logo, setLogo ] = useState<string | undefined>();
-  
     useEffect(() => {
-       setLogo(undefined);
+        if(macaddress === getstorage.find(itens => itens)?.macaddress){
+           setLogo(getstorage.find(itens => itens)?.imgUrl);
+        }
     }, []);
 
     return(
@@ -60,8 +64,3 @@ const Hosts: React.FC <Props> = ({ uuid, id, name, modelo, macaddress, ipaddress
 }
 
 export default Hosts;
-
-/**
-    <Section>
-                 
- */

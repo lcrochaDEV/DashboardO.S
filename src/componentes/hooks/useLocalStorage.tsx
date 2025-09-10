@@ -8,6 +8,7 @@ interface StorageItens {
     macaddress?: string,
     user: string | number,
     password: string | number
+    imgUrl?: string
 }
 interface UseLocalStorageReturn {
   poststorage: () => void,
@@ -15,74 +16,55 @@ interface UseLocalStorageReturn {
   deletestorage: (id: string | number | null) => void,
 }
 
-
-const STORAGE_KEY = (key: string = 'gateway')=> {
-    return key;
-}
-
-//const STORAGE_KEY() = 'gateway';
-const itensStorage: StorageItens[] = JSON.parse(localStorage.getItem(STORAGE_KEY()) as string) || [];
-const itemId = () => {
-   return itensStorage.length +1;
-}
-
-const cadastrarLocalSorage = ({ value }: StorageItens | any) => {
-    //VERIFICA CADASTRO REPETIDOS     
-    let arraList = itensStorage.filter((item) => item.ip === value[0].ip);
-    if(!arraList.length ){
-        itensStorage.push(value[0])
-        localStorage.setItem(STORAGE_KEY(), JSON.stringify(itensStorage));
-        console.log('Cadastrado')
-    }else{
-        console.log('Item cadastrado!')
-    }
-}
-
-const removedataLocalSorage = ({ id }: Omit<StorageItens, 'marca' | 'ip' | 'user' | 'password'>) => {
-    itensStorage.splice(itensStorage.findIndex(itens => itens.id === id), 1);
-    localStorage.setItem(STORAGE_KEY(), JSON.stringify(itensStorage));
-}
-
-const editdataLocalSorage = ({ id, ip, marca, macaddress, user, password  }: StorageItens) => {
-    let objItens = {
-                "id": id,
-                "marca": marca,
-                "ip": ip,
-                "macaddress": macaddress,
-                "user": user,
-                "password": password
-    }
-    itensStorage.splice(itensStorage.findIndex(itens => itens.id === id), 1, objItens)
-    localStorage.setItem(STORAGE_KEY(), JSON.stringify(itensStorage));
-  
-
-}
-
-export const useLocalStorge = ({ key, marca, ip, macaddress, user, password }: Partial<Omit<StorageItens, 'id'>>): [UseLocalStorageReturn, StorageItens[]] => {
+export const useLocalStorge = ({ key, marca, ip, macaddress, user, password, imgUrl }: Partial<Omit<StorageItens, 'id'>>): [UseLocalStorageReturn, StorageItens[]] => {
+    const [ storage_key ] = useState<string>(key ?? 'gateway');
+    const itensStorage: StorageItens[] = JSON.parse(localStorage.getItem(storage_key) as string) || [];
     const [ getstorage, setGetstorage ] = useState<StorageItens[]>(itensStorage); //BUSCA DADOS E EXIBE NA TABELA
-    
-    useEffect(() => {
-        STORAGE_KEY(key)
-    }, [key]);
 
-    const poststorage = () => {
-        if(marca && ip)
-            cadastrarLocalSorage({ marca: marca, 
-                value: [
-                    {
-                        "id": itemId(),
-                        "marca": marca,
-                        "ip": ip,
-                        "macaddress": macaddress,
-                        "user": user,
-                        "password": password
-                    }
-                ]})
-    }
     useEffect(() => {
-        setGetstorage(itensStorage as [])
+        setGetstorage(itensStorage as []);
     }, [marca]);
 
+
+    const itemId = () => itensStorage.length +1;
+
+    const cadastrarLocalSorage = ({ ...objItensStorage }: StorageItens | any) => {
+        //VERIFICA CADASTRO REPETIDOS     
+        let arraList = itensStorage.filter((item) => item.ip === objItensStorage.ip || item.macaddress === objItensStorage.macaddress);
+        console.log(arraList)
+        if(!arraList.length ){
+            itensStorage.push(objItensStorage)
+           localStorage.setItem(storage_key, JSON.stringify(itensStorage));
+            console.log('Cadastrado')
+        }else{
+            console.log('Item já cadastrado!')
+        }
+    }
+
+    const removedataLocalSorage = ({ id }: Omit<StorageItens, 'marca' | 'ip' | 'user' | 'password' | 'imgUrl'>) => {
+        itensStorage.splice(itensStorage.findIndex(itens => itens.id === id), 1);
+        localStorage.setItem(storage_key, JSON.stringify(itensStorage));
+    }
+
+    const editdataLocalSorage = ({ ...objItensStorage }: StorageItens) => {
+        itensStorage.splice(itensStorage.findIndex(itens => itens.id === objItensStorage.id), 1, objItensStorage)
+        localStorage.setItem(storage_key, JSON.stringify(itensStorage));
+    }
+
+    const poststorage = () => {
+        if(storage_key === "gateway" ? marca && ip : marca && macaddress)
+            cadastrarLocalSorage(
+                {
+                    "id": itemId(),
+                    "marca": marca,
+                    "ip": ip,
+                    "macaddress": macaddress,
+                    "user": user,
+                    "password": password,
+                    "imgUrl": imgUrl
+                }
+            )
+    }
 
     const editestorage = (id: string | number | null) => {
         if (id !== null) {
@@ -93,7 +75,8 @@ export const useLocalStorge = ({ key, marca, ip, macaddress, user, password }: P
                     marca: marca ?? '', 
                     macaddress: macaddress, 
                     user: user ?? '', 
-                    password: password ?? ''
+                    password: password ?? '',
+                    imgUrl: imgUrl ?? ''
                 }
             )
         }

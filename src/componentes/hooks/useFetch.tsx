@@ -22,6 +22,7 @@ export const useFetchData = <T = unknown>(url: string, headersDataBudy: headersD
         queryFn: async () => fetchData<T>(url, headersDataBudy),
         enabled: queries?.enabled,
     })
+
     return{
         ...query,
         data: query.data,
