@@ -31,10 +31,13 @@ interface Props {
 const Hosts: React.FC <Props> = ({ uuid, name, modelo, macaddress, ipaddress }: Props) => {
     const [ {}, getstorage ] = useLocalStorge({key: 'hosts'});
     const [ logo, setLogo ] = useState<string | undefined>();
+    const [ hostName, setHostName ] = useState<string | undefined>();
     useEffect(() => {
-        if(macaddress === getstorage.find(itens => itens)?.macaddress){
-           setLogo(getstorage.find(itens => itens)?.imgUrl);
-        }
+        getstorage.find(itens => {
+            if(itens.macaddress === macaddress){
+                setHostName(itens.marca);
+                setLogo(itens.imgUrl);
+            }})
     }, []);
 
     return(
@@ -53,7 +56,7 @@ const Hosts: React.FC <Props> = ({ uuid, name, modelo, macaddress, ipaddress }: 
             <Section>
                 <Link to={`/host/${uuid}`} data-id={uuid}>
                     <IMG src={logo ?? cpu} alt="cpu"/>
-                    <p>{name} <span>{modelo}</span></p>
+                    <p>{name} <span>{hostName ?? modelo}</span></p>
                     <p>MAC: {macaddress}</p>
                     <p>IP: {ipaddress}</p>
                 </Link>

@@ -55,15 +55,19 @@ const Host: React.FC = () => {
     }, [data]);
 
     const [ logo, setLogo ] = useState<string | undefined>();
+    const [ hostName, setHostName ] = useState<string | undefined>();
     const [ marca, setMarca ] = useState<string | undefined>(undefined);
     const [ urlLink, setUrlLink ] = useState<string | undefined>(undefined);
     const [ target, setTarget ] = useState<string | undefined>(undefined);
-
+    
     useEffect(() => {
-        if(data.HWaddress === getstorage.find(itens => itens)?.macaddress){
-            setLogo(getstorage.find(itens => itens)?.imgUrl);
-        }
+        getstorage.find(itens => {
+            if(itens.macaddress === data.HWaddress){
+                setHostName(itens.marca);
+                setLogo(itens.imgUrl);
+            }})
     }, []);
+
 
     let [open, setOpen] = useState<Boolean>(false);
 
@@ -83,7 +87,7 @@ const Host: React.FC = () => {
                 <a href="#"  onClick={() => setOpen(true)}>
                     <IMG src={logo ?? cpu} alt="cpu" />
                 </a>
-                <P>{data.FullHostnameFQDN} <span>{data.ShortHostname}</span></P>
+                <P>{data.FullHostnameFQDN} <span>{hostName ?? data.ShortHostname}</span></P>
                 <A href={urlLink} target={target}>IP: {data.Address}</A>
                 <P>MAC: {data.HWaddress}</P>
             </Section>

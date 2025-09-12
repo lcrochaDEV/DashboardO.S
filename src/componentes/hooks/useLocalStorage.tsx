@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useDebugValue, useEffect, useState } from "react";
 
 interface StorageItens {
     key?: string,
@@ -25,14 +25,17 @@ export const useLocalStorge = ({ key, marca, ip, macaddress, user, password, img
         setGetstorage(itensStorage as []);
     }, [marca]);
 
-
-    const itemId = () => itensStorage.length +1;
+    const itemId = () => {
+        if(itensStorage.find(itens => itens.id === itensStorage.length)?.id === undefined){
+            return itensStorage.length;
+        }
+        return itensStorage.length +1;
+    }
 
     const cadastrarLocalSorage = ({ ...objItensStorage }: StorageItens | any) => {
         //VERIFICA CADASTRO REPETIDOS     
-        let arraList = itensStorage.filter((item) => item.ip === objItensStorage.ip || item.macaddress === objItensStorage.macaddress);
-        console.log(arraList)
-        if(!arraList.length ){
+        let itensList = itensStorage.find((item) => item.ip === objItensStorage.ip && item.macaddress === objItensStorage.macaddress);
+        if(storage_key === "gateway" ? !itensList : !itensList){
             itensStorage.push(objItensStorage)
            localStorage.setItem(storage_key, JSON.stringify(itensStorage));
             console.log('Cadastrado')
